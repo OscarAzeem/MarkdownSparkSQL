@@ -25,3 +25,18 @@ import org.apache.spark.sql.{ _}
 import org.joda.time.{ _}
 import org.apache.spark.sql.expressions.Window
 ```
+
+## Code
+* Unwrap a List inside a function
+```scala
+val list_to_unwrap = List("a","b")
+function(list_to_unwrap:_*)
+```
+* Read a parquet file to a Spark Dataframe
+```scala
+val parquet_file = spark.read.parquet("full_path_to_parquet_partitions")
+```
+    * Example:
+```scala
+val parquet_table = spark.read.parquet("/datos/parquet_files/weather_info")
+```
