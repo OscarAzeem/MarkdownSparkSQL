@@ -35,6 +35,7 @@ function(list_to_unwrap:_*)
 * Read a parquet file to a Spark Dataframe
 ```scala
 val parquet_table = spark.read.parquet("/datos/parquet_files/weather_info")
+.select(col("*"))
 ```
 * Filter a dataframe, multiple conditions
 ```scala
@@ -47,6 +48,37 @@ val parquet_table
 && (col("column_name3")==="C" || col("column_name4")==="E")
 && col("column_ids").isin(list_to_unwrap:_*)
 )
-.select(col("*"))
-
+.select(col("column_name").alias("alias_column_name")
+,col("column_name2"))
+```
+* Window functions
+```scala
+val parquet_table2 = parquet_table
+.select(col("column_name1")
+       ,col("column_name2"))
+.withColumn("max_date",row_number()
+            .over(Window.partitionBy(col("column_date"),col("partition_column"))
+            .orderBy(col("column_date").desc)))
+            .filter(col("max_date")===1)
+.withColumn("max_date",row_number()
+            .over(Window.partitionBy(col("partition_column"))
+            .orderBy(col("column_date").desc)))
+            .filter(col("max_date")===1)
+```
+* Select case when
+```scala
+val parquet_file2=parquet_file
+.select(
+col("column_name1")
+,col("column_name2")
+,col("column_name3").alias("columna_name_alias")
+,when(col("column_name1")<"0" 
+    && col("column_name2").isNotNull
+    && col("column_name3").isNull,
+    col("column_output_when")*lit(-1)
+)
+    .otherwise(col("column_name6")
+)
+.alias("column_name_alias_when")
+)
 ```
