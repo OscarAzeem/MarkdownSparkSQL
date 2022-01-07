@@ -34,9 +34,19 @@ function(list_to_unwrap:_*)
 ```
 * Read a parquet file to a Spark Dataframe
 ```scala
-val parquet_file = spark.read.parquet("full_path_to_parquet_partitions")
-```
-    * Example:
-```scala
 val parquet_table = spark.read.parquet("/datos/parquet_files/weather_info")
+```
+* Filter a dataframe, multiple conditions
+```scala
+val parquet_table
+.filter(col("column_name")
+&& col("column_name2")==="A"
+&& col("column_name_date")<="2021-01-31"
+&& col("column_name_date")>="2021-01-01"
+&& col("column_name_amount")=!="0"
+&& (col("column_name3")==="C" || col("column_name4")==="E")
+&& col("column_ids").isin(list_to_unwrap:_*)
+)
+.select(col("*"))
+
 ```
