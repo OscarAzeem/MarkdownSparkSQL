@@ -77,6 +77,20 @@ val dataframe=parquet_file
     col("column_name1"))
     .count
     ```
+    * count and Order By
+    ```scala
+    val dataframe = parquet_file
+    .filter(
+        col("column_name1").isNotNull
+        && col("column_name2").isNotNull
+    )
+    .groupBy(
+    col("column_name3"),
+    col("column_name2"),
+    col("column_name4"),
+    col("column_name1"))
+    .count.orderBy(col("count").desc)
+    ```
     * aggregator (sum)
     ```scala
     val dataframe=parquet_file
